@@ -1,0 +1,139 @@
+{
+  "effects": [
+    {
+      "effect_id": "GravityPull",
+      "tracks": [
+        {
+          "deviceId": "hammerTop",
+          "sequence": [
+            {
+              "is_modify_intensity": false,
+              "is_modify_frequency": false,
+              "is_modify_duration": false,
+              "duration_target": 0.0,
+              "sample_id_to_play": "Gravity_Pull_Thunder",
+              "factor_intensity": [],
+              "factor_frequency": []
+            }
+          ]
+        },
+        {
+          "deviceId": "fosters",
+          "sequence": [
+            {
+              "is_modify_intensity": false,
+              "is_modify_frequency": false,
+              "is_modify_duration": false,
+              "duration_target": 0.0,
+              "sample_id_to_play": "Gravity_Pull_Crickets",
+              "factor_intensity": [],
+              "factor_frequency": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "effect_id": "GravtyPush",
+      "tracks": [
+        {
+          "deviceId": "hammerTop",
+          "sequence": [
+            {
+              "is_modify_intensity": false,
+              "is_modify_frequency": false,
+              "is_modify_duration": false,
+              "duration_target": 0.0,
+              "sample_id_to_play": "shot_heavy_no_contact",
+              "factor_intensity": [],
+              "factor_frequency": []
+            }
+          ]
+        },
+        {
+          "deviceId": "fosters",
+          "sequence": [
+            {
+              "is_modify_intensity": false,
+              "is_modify_frequency": false,
+              "is_modify_duration": false,
+              "duration_target": 0.0,
+              "sample_id_to_play": "Ballzooka_Shot_vibe 2",
+              "factor_intensity": [],
+              "factor_frequency": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "samples_palette": [
+    {
+      "sample_id": "Gravity_Pull_Thunder",
+      "sequence": [
+        {
+          "command": "vibrate",
+          "intensity": 0.17,
+          "frequency": 35,
+          "duration_base": 1000
+        }
+      ]
+    },
+    {
+      "sample_id": "Gravity_Pull_Crickets",
+      "sequence": []
+    },
+    {
+      "sample_id": "shot_heavy_no_contact",
+      "sequence": [
+        {
+          "command": "tick",
+          "intensity": 0.7,
+          "frequency": -1,
+          "duration_base": 5
+        },
+        {
+          "command": "pulse",
+          "intensity": 0.7,
+          "frequency": -1,
+          "duration_base": 5
+        },
+        {
+          "command": "pulse",
+          "intensity": 1.0,
+          "frequency": -1,
+          "duration_base": 5
+        },
+        {
+          "command": "pause",
+          "intensity": 0.0,
+          "frequency": -1,
+          "duration_base": 5
+        },
+        {
+          "command": "tick",
+          "intensity": 1.0,
+          "frequency": -1,
+          "duration_base": 5
+        }
+      ]
+    },
+    {
+      "sample_id": "Ballzooka_Shot_vibe 2",
+      "sequence": [
+        {
+          "command": "pause",
+          "intensity": 0.5,
+          "frequency": 40,
+          "duration_base": 100
+        },
+        {
+          "command": "vibrate",
+          "intensity": 0.15,
+          "frequency": 70,
+          "duration_base": 200
+        }
+      ]
+    }
+  ]
+}

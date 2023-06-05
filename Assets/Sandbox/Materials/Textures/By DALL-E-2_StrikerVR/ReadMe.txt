@@ -1,0 +1,1 @@
+All textures in this folder were created using OpenAi's Dall-E 2 software.
