@@ -15,5 +15,4 @@ MonoBehaviour:
   Keys: 0100000007000000
   Values:
   - featureSets: []
-  - featureSets:
-    - com.htc.wave.openxr.featureset.vivexr
+  - featureSets: []
