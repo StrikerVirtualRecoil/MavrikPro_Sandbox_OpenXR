@@ -10,12 +10,11 @@ public class GravityTosser : MonoBehaviour
 
     public Transform firePoint;
 
-    public Rigidbody currentRB;
-    public GameObject currentObj;
-    public GameObject lastObject;
+    private Rigidbody currentRB;
+    private GameObject currentObj;
+    private GameObject lastObject;
 
-
-    public RaycastHit grapplePoint;
+    private RaycastHit grapplePoint;
 
     bool isGrappling = false;
 
@@ -43,60 +42,46 @@ public class GravityTosser : MonoBehaviour
         GrapplingTriggerDown();
         GrapplingTriggerUp();
         DoGrappling();
-       
     }
-   
+
     void HighlightObject(GameObject gameObject)
     {
         if (lastObject != gameObject)
         {
             ClearHighlighted();
-            gameObject.transform.GetChild(0).gameObject.SetActive(true);
-            lastObject = gameObject;
+            if (gameObject != null)
+            {
+                Transform child = gameObject.transform.GetChild(0);
+                if (child != null) child.gameObject.SetActive(true);
+                lastObject = gameObject;
+            }
         }
     }
 
     void ClearHighlighted()
     {
-        if (lastObject != null || currentRB == null || !currentObj.CompareTag("Gravitable"))
+        if (lastObject != null)
         {
-            
-            lastObject.transform.GetChild(0).gameObject.SetActive(false);
-            currentObj = null;
-            lastObject = null;
+            Transform child = lastObject.transform.GetChild(0);
+            if (child != null) child.gameObject.SetActive(false);
         }
-
-        if (currentObj != null)
-        {
-            currentObj.transform.GetChild(0).gameObject.SetActive(false);
-        }
-
+        lastObject = null;
+        currentObj = null;
     }
 
     void HighlightObjectInRay()
     {
-        // Check if we hit something.
         if (Physics.Raycast(firePoint.position, firePoint.forward, out grapplePoint))
         {
+            Rigidbody hitRB = grapplePoint.rigidbody;
 
-            // Get the object that was hit.
-
-            if (grapplePoint.rigidbody != null)
+            if (hitRB != null && hitRB.gameObject.CompareTag("Gravitable"))
             {
-                currentRB = grapplePoint.rigidbody;
+                currentRB = hitRB;
+                currentObj = hitRB.gameObject;
+                HighlightObject(currentObj);
             }
-            
-           
-            currentObj = currentRB.gameObject;
-            
-
-
-            if (currentRB.gameObject != null)
-            {
-                HighlightObject(currentRB.gameObject);
-            }
-
-            if (!grapplePoint.rigidbody.gameObject.CompareTag("Gravitable") || grapplePoint.rigidbody == null)
+            else
             {
                 ClearHighlighted();
             }
@@ -105,85 +90,69 @@ public class GravityTosser : MonoBehaviour
         {
             ClearHighlighted();
         }
-
-        
     }
 
     public void GrapplingTriggerDown()
     {
-            if (mavrik.GetTriggerDown())
-            {
-                isGrappling = true;
+        if (mavrik.GetTriggerDown() && currentRB != null)
+        {
+            isGrappling = true;
+            particles.Play();
 
-                particles.Play();
+            Vector3 grappleDirection = (transform.position - grapplePoint.point);
+            currentRB.isKinematic = false;
+            currentRB.velocity = grappleDirection.normalized * grappleSpeed;
 
-
-                Vector3 grappleDirection = (transform.position - grapplePoint.point);
-
-                if (currentRB != null)
-                {
-                    currentRB.isKinematic = false;
-                    currentRB.velocity = grappleDirection.normalized * grappleSpeed;
-                    
-                    particleParent.SetActive(true);
-                    mavrik.FireHaptic(gravityPull);
-                    InvokeRepeating("GravityPull", 1f, 1f);
-                }
-
-            }
-        
-
+            particleParent.SetActive(true);
+            mavrik.FireHaptic(gravityPull);
+            InvokeRepeating("GravityPull", 1f, 1f);
+        }
     }
 
     public void DoGrappling()
     {
-        if (isGrappling)
+        if (isGrappling && currentRB != null)
         {
-            //Get Vector between player and grappling point
             Vector3 grappleDirection = (grapplePoint.point - transform.position);
+            float currentDistance = grappleDirection.magnitude;
 
-            // With this you can determine if you are overshooting your target
-            if (currentRB != null && currentObj == lastObject && distance < grappleDirection.magnitude)
+            if (currentDistance < distance)
             {
                 currentRB.gameObject.transform.SetParent(firePoint.transform);
             }
-            else
-                //Calculate distance between player and grappling point
-                distance = grappleDirection.magnitude;
+            distance = currentDistance;
         }
     }
-
 
     public void GrapplingTriggerUp()
     {
-        //turn grappling mode off when the button is released
-        if (currentRB != null && mavrik.GetTriggerUp())
+        if (mavrik.GetTriggerUp())
         {
-            Debug.Log("this is my parent: " + currentRB.gameObject.transform.parent);
+            if (currentRB != null)
+            {
+                Debug.Log("this is my parent: " + currentRB.gameObject.transform.parent);
 
-            isGrappling = false;
+                isGrappling = false;
+                particles.Stop();
+                CancelInvoke("GravityPull");
 
-            particles.Stop();
-            CancelInvoke("GravityPull");
+                currentRB.isKinematic = false;
+                currentRB.gameObject.transform.SetParent(null);
+                mavrik.FireHaptic(gravityPush);
+                currentRB.AddForce(firePoint.transform.forward * 5000);
+            }
 
-            currentRB.isKinematic = false;
-            currentRB.gameObject.transform.SetParent(null);
-            mavrik.FireHaptic(gravityPush);
-            currentRB.gameObject.GetComponent<Rigidbody>().AddForce(firePoint.transform.forward * 5000);
-
+            particleParent.SetActive(false);
+            firePoint.transform.DetachChildren();
         }
-        else if(currentRB == null)
-        {
-            CancelInvoke("GravityPull");
-        }
-
-        particleParent.SetActive(false);
-        firePoint.transform.DetachChildren();
-
     }
 
     public void GravityPull()
-    { 
-        mavrik.FireHaptic(gravityPull);
+    {
+        if (currentRB != null)
+        {
+            mavrik.FireHaptic(gravityPull);
+        }
     }
 }
+

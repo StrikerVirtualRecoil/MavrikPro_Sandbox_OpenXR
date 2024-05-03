@@ -11,13 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 0
+  - enabled: 1
     path: Assets/Sandbox/Scenes/StrikerVR_Mavrik_Sandbox_Focus3_wristtracker.unity
     guid: dcab75195222eeb40ba17c56b10155e4
   - enabled: 1
     path: Assets/Sandbox/Scenes/StrikerVR_Mavrik_Sandbox_Quest2.unity
     guid: 479f737c5d25e054da941cf34f6d9cf2
-  - enabled: 0
+  - enabled: 1
     path: Assets/Sandbox/Scenes/StrikerVR_Mavrik_Sandbox_Focus3_Controller.unity
     guid: 3c031e4eac0c7a746ac02baced7f5d6b
   m_configObjects:

@@ -15,7 +15,7 @@ public class ModeHandler : MonoBehaviour
 
     private DeviceButton sideRight, sideLeft;
 
-    public GameObject classic, gravity, ballzooka, crossbeaux, plasma;
+    public GameObject classic, gravity, ballzooka, crossbeaux, plasma, selecta;
 
     public GravityTosser gravityTosser;
 
@@ -23,7 +23,7 @@ public class ModeHandler : MonoBehaviour
 
     public HapticEffectAsset blaster_swap;
 
-    
+
 
     public int fireMode;
     public int fireModeMax;
@@ -33,7 +33,7 @@ public class ModeHandler : MonoBehaviour
     void Start()
     {
         fireMode = 0;
-        fireModeMax = 5;
+        fireModeMax = 6;
 
         sideRight = DeviceButton.SideRight;
         sideLeft = DeviceButton.SideLeft;
@@ -54,7 +54,7 @@ public class ModeHandler : MonoBehaviour
             if (fireMode < fireModeMax)
             {
                 fireMode++;
-                ModeSwap(); 
+                ModeSwap();
             }
             else
             {
@@ -136,7 +136,17 @@ public class ModeHandler : MonoBehaviour
         }
         else
         {
-             plasma.SetActive(false);
+            plasma.SetActive(false);
+        }
+
+        if (fireMode == 6)
+        {
+            selecta.SetActive(true);
+            tmp.text = "UI Selecta";
+        }
+        else
+        {
+            selecta.SetActive(false);
         }
     }
 
